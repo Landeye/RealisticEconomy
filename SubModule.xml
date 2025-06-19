@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Module>
+  <Id value="RealisticEconomy"/>
+  <Name value="Realistic Economy"/>
+  <Version value="v1.0.0"/>
+
+  <SingleplayerModule value="true"/>
+  <MultiplayerModule value="false"/>
+  <Official value="false"/>
+
+  <Dependencies>
+    <Dependency Id="Native"/>
+    <Dependency Id="SandBoxCore"/>
+    <Dependency Id="SandBox"/>
+    <Dependency Id="StoryMode"/>
+    <!-- remove Harmony for now -->
+  </Dependencies>
+
+  <SubModules>
+    <SubModule>
+      <Name value="Realistic Economy Simulation"/>
+      <DLLName value="RealisticEconomy.dll"/>
+      <SubModuleClassType value="RealisticEconomy.SubModule"/>
+      <Tags>
+        <Tag key="DedicatedServerType" value="none"/>
+      </Tags>
+    </SubModule>
+  </SubModules>
+</Module>

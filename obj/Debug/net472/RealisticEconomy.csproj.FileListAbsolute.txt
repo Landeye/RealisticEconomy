@@ -1,0 +1,2 @@
+V:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csprojAssemblyReference.cache
+V:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csproj.CoreCompileInputs.cache
