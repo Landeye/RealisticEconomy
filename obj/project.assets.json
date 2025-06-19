@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "V:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Bannerlord\\Modules\\RealisticEconomy\\RealisticEconomy.csproj",
+      "projectUniqueName": "C:\\Users\\Landis\\Desktop\\BannerlordModBackup\\RealisticEconomy\\RealisticEconomy.csproj",
       "projectName": "RealisticEconomy",
-      "projectPath": "V:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Bannerlord\\Modules\\RealisticEconomy\\RealisticEconomy.csproj",
+      "projectPath": "C:\\Users\\Landis\\Desktop\\BannerlordModBackup\\RealisticEconomy\\RealisticEconomy.csproj",
       "packagesPath": "C:\\Users\\Landis\\.nuget\\packages\\",
-      "outputPath": "V:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Bannerlord\\Modules\\RealisticEconomy\\obj\\",
+      "outputPath": "C:\\Users\\Landis\\Desktop\\BannerlordModBackup\\RealisticEconomy\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Landis\\AppData\\Roaming\\NuGet\\NuGet.Config",

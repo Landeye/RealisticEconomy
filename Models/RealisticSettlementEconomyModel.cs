@@ -1,63 +1,56 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;             // Town, Settlement, ItemCategory, ItemData
-using TaleWorlds.CampaignSystem.ComponentInterfaces;     // SettlementEconomyModel
-using TaleWorlds.Core;                                   // InformationManager, InformationMessage
-using TaleWorlds.Library;                                // (only for convenience)
+﻿using TaleWorlds.CampaignSystem.Settlements;          // Town, Settlement, ItemCategory, ItemData
+using TaleWorlds.CampaignSystem.ComponentInterfaces;  // SettlementEconomyModel
+using TaleWorlds.CampaignSystem.GameComponents;       // DefaultSettlementEconomyModel
+using TaleWorlds.Core;                                // InformationManager
+using TaleWorlds.Library;                             // InformationMessage
 
 namespace RealisticEconomy.Models
 {
     public class RealisticSettlementEconomyModel : SettlementEconomyModel
     {
-        // 1) Town gold change – exact signature Bannerlord expects
+        // Instantiate the game's default economy model directly
+        private SettlementEconomyModel DefaultModel => new DefaultSettlementEconomyModel();
+
+        // 1) Town gold change
         public override int GetTownGoldChange(Town town)
         {
-            // a) Let the game compute its normal gold-change
-            int gold = base.GetTownGoldChange(town);
-
-            // b) DEBUG: pop up a message so you know this override is running
+            int gold = DefaultModel.GetTownGoldChange(town);
             InformationManager.DisplayMessage(
-                new InformationMessage(
-                    $"[RealisticEconomy] {town.Name} gold change = {gold}"
-                )
+                new InformationMessage($"[RealisticEconomy] {town.Name} daily gold = {gold}")
             );
-
-            // c) Return the unmodified result
             return gold;
         }
 
-        // 2) How much demand shifts per gold-value
-        public override float GetDemandChangeForValue(float value)
-            => base.GetDemandChangeForValue(value);
+        // 2) Demand shift per purchase value
+        public override float GetDemandChangeFromValue(float purchaseValue)
+            => DefaultModel.GetDemandChangeFromValue(purchaseValue);
 
-        // 3) Supply-vs-demand tuple for a category
-        public override (float supply, float demand) GetSupplyDemandForCategory(
+        // 3) Supply vs demand tuple (supply, demand)
+        public override (float, float) GetSupplyDemandForCategory(
             Town town,
             ItemCategory category,
-            float currentValue,
-            float maxValue,
-            float minValue,
-            float baseDemand)
-            => base.GetSupplyDemandForCategory(town, category, currentValue, maxValue, minValue, baseDemand);
+            float dailySupply,
+            float dailyDemand,
+            float oldSupply,
+            float oldDemand)
+            => DefaultModel.GetSupplyDemandForCategory(
+                   town, category,
+                   dailySupply, dailyDemand,
+                   oldSupply, oldDemand
+               );
 
-        // 4) Estimated demand for a specific item category
+        // 4) Estimated demand for one item category
         public override float GetEstimatedDemandForCategory(
             Town town,
-            ItemData item,
+            ItemData itemData,
             ItemCategory category)
-            => base.GetEstimatedDemandForCategory(town, item, category);
+            => DefaultModel.GetEstimatedDemandForCategory(town, itemData, category);
 
-        // 5) Daily demand for a category over N days
+        // 5) Daily aggregate demand over N days
         public override float GetDailyDemandForCategory(
             Town town,
             ItemCategory category,
             int days)
-            => base.GetDailyDemandForCategory(town, category, days);
-
-        // 6) Total income for a settlement
-        public override int CalculateIncome(Settlement settlement)
-            => base.CalculateIncome(settlement);
-
-        // 7) Total expenses for a settlement
-        public override int CalculateExpenses(Settlement settlement)
-            => base.CalculateExpenses(settlement);
+            => DefaultModel.GetDailyDemandForCategory(town, category, days);
     }
 }

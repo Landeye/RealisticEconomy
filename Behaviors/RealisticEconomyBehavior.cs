@@ -1,20 +1,24 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces; // for starter.AddModel(...)
-using TaleWorlds.SaveSystem;                        // for IDataStore
-using RealisticEconomy.Models;                      // for RealisticSettlementEconomyModel
+using TaleWorlds.CampaignSystem.ComponentInterfaces;  // for SettlementEconomyModel
+using TaleWorlds.MountAndBlade;                       // for CampaignBehaviorBase, CampaignEvents, CampaignGameStarter
+using TaleWorlds.SaveSystem;                         // for IDataStore
+using RealisticEconomy.Models;                       // for RealisticSettlementEconomyModel
 
 namespace RealisticEconomy.Behaviors
 {
     public class RealisticEconomyBehavior : CampaignBehaviorBase
     {
         public override void RegisterEvents()
-            => CampaignEvents.OnSessionLaunchedEvent
-                             .AddNonSerializedListener(this, OnSessionLaunched);
+        {
+            // Fires once the campaign has fully launched
+            CampaignEvents.OnSessionLaunchedEvent
+                          .AddNonSerializedListener(this, OnSessionLaunched);
+        }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            // Register your custom economy model so it overrides the built-in one
-            // starter.AddModel(new RealisticSettlementEconomyModel());
+            // **** UNCOMMENTED: inject your custom model ****
+            starter.AddModel(new RealisticSettlementEconomyModel());
         }
 
         public override void SyncData(IDataStore dataStore) { }
