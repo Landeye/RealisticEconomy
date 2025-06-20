@@ -1,6 +1,5 @@
 V:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csprojAssemblyReference.cache
 V:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csproj.CoreCompileInputs.cache
-C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csprojAssemblyReference.cache
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csproj.CoreCompileInputs.cache
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\RealisticEconomy.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\RealisticEconomy.pdb
@@ -11,9 +10,9 @@ C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\ne
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.Library.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.Localization.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.MountAndBlade.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.ObjectSystem.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.SaveSystem.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.ScreenSystem.dll
-C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.ObjectSystem.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\Newtonsoft.Json.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.PlayerServices.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.ModuleManager.dll
@@ -36,3 +35,4 @@ C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\ne
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csproj.CopyComplete
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.pdb
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csprojAssemblyReference.cache
