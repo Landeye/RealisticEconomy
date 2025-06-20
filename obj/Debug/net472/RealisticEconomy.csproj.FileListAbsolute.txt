@@ -36,3 +36,5 @@ C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\Re
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.pdb
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Debug\net472\RealisticEconomy.csprojAssemblyReference.cache
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.GauntletUI.Data.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Debug\net472\net472\TaleWorlds.GauntletUI.PrefabSystem.dll

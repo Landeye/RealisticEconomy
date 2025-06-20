@@ -1,12 +1,8 @@
-﻿using TaleWorlds.CampaignSystem;                        // for Campaign.Current
-using TaleWorlds.CampaignSystem.Settlements;            // for Settlement.Find, Town
-using TaleWorlds.CampaignSystem.ComponentInterfaces;    // for SettlementEconomyModel
-using TaleWorlds.CampaignSystem.GameComponents;         // for DefaultSettlementEconomyModel
-using TaleWorlds.MountAndBlade;                         // for CampaignBehaviorBase, CampaignEvents, CampaignGameStarter
-using TaleWorlds.Core;                                  // for InformationManager
-using TaleWorlds.Library;                               // for InformationMessage
-using TaleWorlds.SaveSystem;                            // for IDataStore
-using RealisticEconomy.Models;                          // for RealisticSettlementEconomyModel
+﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
+using RealisticEconomy.Models;  // for FileLogger, RealisticSettlementEconomyModel
 
 namespace RealisticEconomy.Behaviors
 {
@@ -16,33 +12,30 @@ namespace RealisticEconomy.Behaviors
         {
             CampaignEvents.OnSessionLaunchedEvent
                           .AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.DailyTickSettlementEvent
+                          .AddNonSerializedListener(this, OnDailySettlementTick);
         }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            // 1) Confirm the behavior is firing
-            InformationManager.DisplayMessage(
-                new InformationMessage("[RealEco] Behavior fired")
-            );
-
-            // 2) Force-test Sargot gold immediately
-            var settlement = Settlement.Find("town_sargot");
-            if (settlement != null && settlement.Town != null)
-            {
-                Town sargotTown = settlement.Town;
-                var defaultModel = new DefaultSettlementEconomyModel();
-                int gold = defaultModel.GetTownGoldChange(sargotTown);
-
-                InformationManager.DisplayMessage(
-                    new InformationMessage($"[RealEco] Sargot gold test = {gold}")
-                );
-            }
-
-            // 3) Register your custom economy model for the daily tick
+            FileLogger.Clear();
+            FileLogger.Log("=== RealisticEconomy Daily Log Started ===");
+            // Register your model so the game uses it for its own economy ops
             starter.AddModel(new RealisticSettlementEconomyModel());
         }
 
-        // Required by CampaignBehaviorBase
+        private void OnDailySettlementTick(Settlement settlement)
+        {
+            if (settlement.Town == null) return;
+            var town = settlement.Town;
+
+            // Instantiate *your* model and call its override directly:
+            var model = new RealisticSettlementEconomyModel();
+            int dailyChange = model.GetTownGoldChange(town);
+
+            FileLogger.Log($"{town.Name}: Δ gold = {dailyChange}");
+        }
+
         public override void SyncData(IDataStore dataStore) { }
     }
 }
