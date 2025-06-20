@@ -1,10 +1,9 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
-using TaleWorlds.MountAndBlade;
-using TaleWorlds.SaveSystem;
-using TaleWorlds.Core;
-using TaleWorlds.Library;
-using RealisticEconomy.Models;
+using TaleWorlds.CampaignSystem.Settlements;          // for Settlement, Town
+using TaleWorlds.CampaignSystem.ComponentInterfaces; // for IDataStore
+using TaleWorlds.CampaignSystem.GameComponents;      // for SettlementFoodStocksComponent
+using TaleWorlds.MountAndBlade;                      // for CampaignBehaviorBase, CampaignEvents
+using RealisticEconomy.Models;                       // for FileLogger
 
 namespace RealisticEconomy.Behaviors
 {
@@ -12,30 +11,53 @@ namespace RealisticEconomy.Behaviors
     {
         public override void RegisterEvents()
         {
-            // DEBUG: confirm RegisterEvents is called
-            InformationManager.DisplayMessage(
-                new InformationMessage("[RealEco] RegisterEvents called")
-            );
             CampaignEvents.OnSessionLaunchedEvent
-                .AddNonSerializedListener(this, OnSessionLaunched);
+                          .AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.DailyTickSettlementEvent
+                          .AddNonSerializedListener(this, OnDailySettlementTick);
         }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            // DEBUG: confirm OnSessionLaunched fired
-            InformationManager.DisplayMessage(
-                new InformationMessage("[RealEco] OnSessionLaunched fired")
-            );
-
-            // 1) Clear previous logs
             FileLogger.Clear();
-
-            // 2) Inject our custom economy model override
+            FileLogger.Log("=== RealisticEconomy Daily Log Started ===");
             starter.AddModel(new RealisticSettlementEconomyModel());
+        }
 
-            // DEBUG: confirm model added
-            InformationManager.DisplayMessage(
-                new InformationMessage("[RealEco] Custom model registered")
+        private void OnDailySettlementTick(Settlement settlement)
+        {
+            if (settlement.Town == null) return;
+            var town = settlement.Town;
+
+            // 1) Gold change
+            var econModel = new RealisticSettlementEconomyModel();
+            int dailyGoldDelta = econModel.GetTownGoldChange(town);
+
+            // 2) Prosperity
+            int prosperity = (int)town.Prosperity;
+
+            // 3) Food stocks (current)
+            var foodComp = settlement.GetComponent<SettlementFoodStocksComponent>();
+            int currentFood = (int)foodComp.FoodStocks;
+
+            // 4) Food change
+            var foodModel = Campaign.Current.Models
+                               .GetModel<SettlementFoodModel>();
+            int dailyFoodDelta = (int)foodModel
+                                    .CalculateTownFoodStocksChange(town)
+                                    .ResultNumber;
+
+            // 5) Optional: Garrison size
+            int garrisonSize = settlement.GarrisonParty?.MemberRoster.TotalManCount ?? 0;
+
+            // Log everything
+            FileLogger.Log(
+                $"{town.Name}: " +
+                $"Δgold={dailyGoldDelta}, " +
+                $"Pros={prosperity}, " +
+                $"FoodNow={currentFood}, " +
+                $"Δfood={dailyFoodDelta}, " +
+                $"Garrison={garrisonSize}"
             );
         }
 

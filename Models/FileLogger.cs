@@ -11,31 +11,24 @@ namespace RealisticEconomy.Models
             "EconomyDebug.txt"
         );
 
-        public static void Clear()
-        {
-            try
-            {
-                var dir = Path.GetDirectoryName(_path);
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                File.WriteAllText(_path, string.Empty);
-            }
-            catch { }
-        }
-
         public static void Log(string line)
         {
             try
             {
-                var dir = Path.GetDirectoryName(_path);
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
+                Directory.CreateDirectory(Path.GetDirectoryName(_path));
                 File.AppendAllText(
                     _path,
-                    "[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] "
-                    + line
-                    + Environment.NewLine
+                    $"[{DateTime.Now:HH:mm:ss}] {line}{Environment.NewLine}"
                 );
+            }
+            catch { /* swallow errors */ }
+        }
+
+        public static void Clear()
+        {
+            try
+            {
+                File.WriteAllText(_path, string.Empty);
             }
             catch { }
         }

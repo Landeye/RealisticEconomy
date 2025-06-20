@@ -40,6 +40,12 @@
     <Reference Include="TaleWorlds.CampaignSystem">
       <HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
     </Reference>
+	<Reference Include="TaleWorlds.CampaignSystem.GameComponents">
+	  <HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.GameComponents.dll</HintPath>
+	</Reference>
+	<Reference Include="TaleWorlds.CampaignSystem.ComponentInterfaces">
+	  <HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
+	</Reference>
     <Reference Include="TaleWorlds.MountAndBlade">
       <HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.dll</HintPath>
     </Reference>
