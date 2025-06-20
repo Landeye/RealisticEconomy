@@ -1,33 +1,30 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;      // for Town, ItemCategory, ItemData
-using TaleWorlds.CampaignSystem.ComponentInterfaces;  // for SettlementEconomyModel
-using TaleWorlds.CampaignSystem.GameComponents;       // for DefaultSettlementEconomyModel
-using TaleWorlds.Core;                                // for InformationManager
-using TaleWorlds.Library;                             // for InformationMessage
+﻿using TaleWorlds.CampaignSystem.Settlements;          // Town, Settlement, ItemCategory, ItemData
+using TaleWorlds.CampaignSystem.ComponentInterfaces;  // SettlementEconomyModel
+using TaleWorlds.CampaignSystem.GameComponents;       // DefaultSettlementEconomyModel
+using RealisticEconomy.Models;                        // FileLogger
+using TaleWorlds.Core;
 
 namespace RealisticEconomy.Models
 {
     public class RealisticSettlementEconomyModel : SettlementEconomyModel
     {
-        // Instantiate the game's default economy model to delegate calls
-        private readonly SettlementEconomyModel _defaultModel = new DefaultSettlementEconomyModel();
+        private readonly DefaultSettlementEconomyModel _default = new DefaultSettlementEconomyModel();
 
-        // 1) Town gold change
+        // Clear the CSV header once when this class is first accessed
+        static RealisticSettlementEconomyModel() => FileLogger.Initialize();
+
+        // 1) Override the daily gold‐change callback
         public override int GetTownGoldChange(Town town)
         {
-            int gold = _defaultModel.GetTownGoldChange(town);
-
-            InformationManager.DisplayMessage(
-                new InformationMessage($"[RealEco] Daily gold for {town.Name} = {gold}")
-            );
-
-            return gold;
+            int delta = _default.GetTownGoldChange(town);
+            FileLogger.LogTick(town, delta);
+            return delta;
         }
 
-        // 2) Demand shift per purchase value
+        // 2) Forward all other abstract members to the concrete default model
         public override float GetDemandChangeFromValue(float purchaseValue)
-            => _defaultModel.GetDemandChangeFromValue(purchaseValue);
+            => _default.GetDemandChangeFromValue(purchaseValue);
 
-        // 3) Supply vs demand tuple (supply, demand)
         public override (float, float) GetSupplyDemandForCategory(
             Town town,
             ItemCategory category,
@@ -35,24 +32,22 @@ namespace RealisticEconomy.Models
             float dailyDemand,
             float oldSupply,
             float oldDemand)
-            => _defaultModel.GetSupplyDemandForCategory(
+            => _default.GetSupplyDemandForCategory(
                    town, category,
                    dailySupply, dailyDemand,
                    oldSupply, oldDemand
                );
 
-        // 4) Estimated demand for one item category
         public override float GetEstimatedDemandForCategory(
             Town town,
             ItemData itemData,
             ItemCategory category)
-            => _defaultModel.GetEstimatedDemandForCategory(town, itemData, category);
+            => _default.GetEstimatedDemandForCategory(town, itemData, category);
 
-        // 5) Daily aggregate demand over N days
         public override float GetDailyDemandForCategory(
             Town town,
             ItemCategory category,
             int extraProsperity = 0)
-            => _defaultModel.GetDailyDemandForCategory(town, category, extraProsperity);
+            => _default.GetDailyDemandForCategory(town, category, extraProsperity);
     }
 }
