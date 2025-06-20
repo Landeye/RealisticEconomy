@@ -1,9 +1,9 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;          // for Settlement, Town
-using TaleWorlds.CampaignSystem.ComponentInterfaces; // for IDataStore
-using TaleWorlds.CampaignSystem.GameComponents;      // for SettlementFoodStocksComponent
-using TaleWorlds.MountAndBlade;                      // for CampaignBehaviorBase, CampaignEvents
-using RealisticEconomy.Models;                       // for FileLogger
+using TaleWorlds.CampaignSystem.Settlements;            // Settlement, Town
+using TaleWorlds.CampaignSystem.ComponentInterfaces;    // IDataStore
+using TaleWorlds.CampaignSystem.GameComponents;         // DefaultSettlementFoodModel
+using TaleWorlds.MountAndBlade;                         // CampaignBehaviorBase, CampaignEvents
+using RealisticEconomy.Models;                          // FileLogger, RealisticSettlementEconomyModel
 
 namespace RealisticEconomy.Behaviors
 {
@@ -13,6 +13,7 @@ namespace RealisticEconomy.Behaviors
         {
             CampaignEvents.OnSessionLaunchedEvent
                           .AddNonSerializedListener(this, OnSessionLaunched);
+
             CampaignEvents.DailyTickSettlementEvent
                           .AddNonSerializedListener(this, OnDailySettlementTick);
         }
@@ -29,28 +30,25 @@ namespace RealisticEconomy.Behaviors
             if (settlement.Town == null) return;
             var town = settlement.Town;
 
-            // 1) Gold change
+            // 1) Gold delta via your override
             var econModel = new RealisticSettlementEconomyModel();
             int dailyGoldDelta = econModel.GetTownGoldChange(town);
 
             // 2) Prosperity
             int prosperity = (int)town.Prosperity;
 
-            // 3) Food stocks (current)
-            var foodComp = settlement.GetComponent<SettlementFoodStocksComponent>();
-            int currentFood = (int)foodComp.FoodStocks;
+            // 3+4) Food stocks & daily delta via DefaultSettlementFoodModel
+            var foodModel = new DefaultSettlementFoodModel();
+            var foodChange = foodModel.CalculateTownFoodStocksChange(town);
+            int dailyFoodDelta = (int)foodChange.ResultNumber;
 
-            // 4) Food change
-            var foodModel = Campaign.Current.Models
-                               .GetModel<SettlementFoodModel>();
-            int dailyFoodDelta = (int)foodModel
-                                    .CalculateTownFoodStocksChange(town)
-                                    .ResultNumber;
+            // To get “current” food stocks, Bannerlord doesn’t expose it directly;
+            // you can approximate with BaseNumber or re‐calculate backward:
+            int currentFood = (int)foodChange.BaseNumber;
 
-            // 5) Optional: Garrison size
-            int garrisonSize = settlement.GarrisonParty?.MemberRoster.TotalManCount ?? 0;
+            // 5) Garrison size directly off Town.GarrisonParty
+            int garrisonSize = town.GarrisonParty?.MemberRoster.TotalManCount ?? 0;
 
-            // Log everything
             FileLogger.Log(
                 $"{town.Name}: " +
                 $"Δgold={dailyGoldDelta}, " +
