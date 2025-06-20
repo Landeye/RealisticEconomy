@@ -1,8 +1,10 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;  // for CampaignBehaviorBase
-using TaleWorlds.MountAndBlade;                       // for CampaignEvents, CampaignGameStarter
-using TaleWorlds.SaveSystem;                          // for IDataStore
-using RealisticEconomy.Models;                        // for RealisticSettlementEconomyModel
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.SaveSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
+using RealisticEconomy.Models;
 
 namespace RealisticEconomy.Behaviors
 {
@@ -10,17 +12,33 @@ namespace RealisticEconomy.Behaviors
     {
         public override void RegisterEvents()
         {
+            // DEBUG: confirm RegisterEvents is called
+            InformationManager.DisplayMessage(
+                new InformationMessage("[RealEco] RegisterEvents called")
+            );
             CampaignEvents.OnSessionLaunchedEvent
-                          .AddNonSerializedListener(this, OnSessionLaunched);
+                .AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            // Register your custom economy model
+            // DEBUG: confirm OnSessionLaunched fired
+            InformationManager.DisplayMessage(
+                new InformationMessage("[RealEco] OnSessionLaunched fired")
+            );
+
+            // 1) Clear previous logs
+            FileLogger.Clear();
+
+            // 2) Inject our custom economy model override
             starter.AddModel(new RealisticSettlementEconomyModel());
+
+            // DEBUG: confirm model added
+            InformationManager.DisplayMessage(
+                new InformationMessage("[RealEco] Custom model registered")
+            );
         }
 
-        // Mandatory override (no-op)
         public override void SyncData(IDataStore dataStore) { }
     }
 }

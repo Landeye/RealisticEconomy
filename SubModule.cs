@@ -1,26 +1,30 @@
 ﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
+using TaleWorlds.Library;
 
 namespace RealisticEconomy
 {
     public class SubModule : MBSubModuleBase
     {
-        // Called when *any* game starts (main menu, campaign, battles, etc.)
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
+            // Confirm at startup that our SubModule is active
+            InformationManager.DisplayMessage(
+                new InformationMessage("[RealEco] SubModule loaded")
+            );
         }
 
-        // Called when a campaign actually begins loading
         protected override void OnGameStart(Game game, IGameStarter starter)
         {
             base.OnGameStart(game, starter);
-
             if (starter is CampaignGameStarter campaignStarter)
             {
-                // Register your behavior so its RegisterEvents() runs:
+                // Confirm behavior is being added
+                InformationManager.DisplayMessage(
+                    new InformationMessage("[RealEco] Adding behavior")
+                );
                 campaignStarter.AddBehavior(new Behaviors.RealisticEconomyBehavior());
             }
         }

@@ -35,4 +35,15 @@ C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.csproj.CopyComplete
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.pdb
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\0Harmony.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\MonoMod.Backports.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\MonoMod.Utils.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\Mono.Cecil.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\MonoMod.Core.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\Mono.Cecil.Mdb.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\Mono.Cecil.Pdb.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\Mono.Cecil.Rocks.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\MonoMod.ILHelpers.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\System.ValueTuple.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\MonoMod.Iced.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.csprojAssemblyReference.cache

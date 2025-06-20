@@ -1,53 +1,69 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;          // Town, Settlement, ItemCategory, ItemData
-using TaleWorlds.CampaignSystem.ComponentInterfaces;  // SettlementEconomyModel
-using TaleWorlds.CampaignSystem.GameComponents;       // DefaultSettlementEconomyModel
-using RealisticEconomy.Models;                        // FileLogger
-using TaleWorlds.Core;
+﻿using TaleWorlds.CampaignSystem.Settlements;       // Settlement, Town
+using TaleWorlds.CampaignSystem.ComponentInterfaces; // SettlementEconomyModel
+using TaleWorlds.Core;                              // InformationManager
+using TaleWorlds.Library;                           // InformationMessage
+using RealisticEconomy.Models;                      // FileLogger
 
 namespace RealisticEconomy.Models
 {
     public class RealisticSettlementEconomyModel : SettlementEconomyModel
     {
-        private readonly DefaultSettlementEconomyModel _default = new DefaultSettlementEconomyModel();
+        private static bool _initialized;
+        private readonly SettlementEconomyModel _defaultModel
+            = Campaign.Current.Models.GetModel<SettlementEconomyModel>();
 
-        // Clear the CSV header once when this class is first accessed
-        static RealisticSettlementEconomyModel() => FileLogger.Initialize();
-
-        // 1) Override the daily gold‐change callback
-        public override int GetTownGoldChange(Town town)
+        // **1) THIS** is the method Bannerlord actually calls every map‐tick
+        public override ExplainedNumber CalculateGoldChangeForSettlement(
+            Settlement settlement, bool includeDescriptions = false)
         {
-            int delta = _default.GetTownGoldChange(town);
-            FileLogger.LogTick(town, delta);
-            return delta;
+            if (!_initialized)
+            {
+                FileLogger.Clear();
+                InformationManager.DisplayMessage(
+                    new InformationMessage("[RealEco] Logger initialized and override hooked")
+                );
+                _initialized = true;
+            }
+
+            var result = _defaultModel.CalculateGoldChangeForSettlement(settlement, includeDescriptions);
+            int delta = (int)result.ResultNumber;
+
+            // console pop‐up
+            InformationManager.DisplayMessage(
+                new InformationMessage($"[RealEco] {settlement.Name} Δgold = {delta}")
+            );
+
+            // file‐log: include prosperity, daily change, maybe food stocks etc.
+            FileLogger.Log(
+                $"{settlement.Name}, " +
+                $"Prosperity={(int)settlement.Prosperity}, " +
+                $"Δgold={delta}, " +
+                $"Food={(int)settlement.TownMarketData.FoodStocks}"
+            );
+
+            return result;
         }
 
-        // 2) Forward all other abstract members to the concrete default model
+        // stub out the rest (so your class compiles)
         public override float GetDemandChangeFromValue(float purchaseValue)
-            => _default.GetDemandChangeFromValue(purchaseValue);
+            => _defaultModel.GetDemandChangeFromValue(purchaseValue);
 
         public override (float, float) GetSupplyDemandForCategory(
-            Town town,
-            ItemCategory category,
-            float dailySupply,
-            float dailyDemand,
-            float oldSupply,
-            float oldDemand)
-            => _default.GetSupplyDemandForCategory(
+            Town town, ItemCategory category,
+            float dailySupply, float dailyDemand,
+            float oldSupply, float oldDemand)
+            => _defaultModel.GetSupplyDemandForCategory(
                    town, category,
                    dailySupply, dailyDemand,
                    oldSupply, oldDemand
                );
 
         public override float GetEstimatedDemandForCategory(
-            Town town,
-            ItemData itemData,
-            ItemCategory category)
-            => _default.GetEstimatedDemandForCategory(town, itemData, category);
+            Town town, ItemData itemData, ItemCategory category)
+            => _defaultModel.GetEstimatedDemandForCategory(town, itemData, category);
 
         public override float GetDailyDemandForCategory(
-            Town town,
-            ItemCategory category,
-            int extraProsperity = 0)
-            => _default.GetDailyDemandForCategory(town, category, extraProsperity);
+            Town town, ItemCategory category, int extraProsperity = 0)
+            => _defaultModel.GetDailyDemandForCategory(town, category, extraProsperity);
     }
 }
