@@ -28,10 +28,12 @@ namespace RealisticEconomy
 
             if (game.GameType is Campaign && gsObj is CampaignGameStarter starter)
             {
-                starter.AddModel(new RealisticSettlementEconomyModel());   // ✅ ← add it once
                 starter.AddBehavior(new RealisticEconomyBehavior());       //  no AddModel inside
                 starter.AddBehavior(new ResourceBehavior());
                 starter.AddBehavior(new CaravanTradeBehavior());
+                starter.AddBehavior(new StarvationPenaltyBehavior());
+                starter.AddBehavior(new TradeDirectiveBehavior());
+                starter.AddBehavior(new CaravanBiasBehavior());
                 EconomyManager.Initialize();
             }
         }

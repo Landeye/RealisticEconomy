@@ -22,6 +22,9 @@ namespace RealisticEconomy.Behaviors
         {
             FileLogger.Clear();
             FileLogger.Log("=== RealisticEconomy Daily Log Started ===");
+
+            // register *here* so it overwrites the vanilla model
+            starter.AddModel(new RealisticSettlementEconomyModel());
         }
 
         private void OnDailySettlementTick(Settlement settlement)

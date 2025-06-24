@@ -67,7 +67,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Patches\" />
 		<Folder Include="UI\" />
 	</ItemGroup>
 
