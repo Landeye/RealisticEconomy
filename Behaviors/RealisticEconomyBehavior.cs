@@ -22,7 +22,6 @@ namespace RealisticEconomy.Behaviors
         {
             FileLogger.Clear();
             FileLogger.Log("=== RealisticEconomy Daily Log Started ===");
-            starter.AddModel(new RealisticSettlementEconomyModel());
         }
 
         private void OnDailySettlementTick(Settlement settlement)
@@ -31,8 +30,19 @@ namespace RealisticEconomy.Behaviors
             var town = settlement.Town;
 
             // 1) Gold delta via your override
-            var econModel = new RealisticSettlementEconomyModel();
-            int dailyGoldDelta = econModel.GetTownGoldChange(town);
+            var econModel = Campaign.Current.Models
+                 .GetType()                                      // reflect
+                 .GetMethod("GetModel") ??                       // 1.2.x
+                 Campaign.Current.Models.GetType()
+                        .GetMethod("GetGameModel");              // 1.1.x
+
+            var realEcoModel = econModel != null
+                ? econModel.Invoke(Campaign.Current.Models,
+                                   new object[] { typeof(SettlementEconomyModel) })
+                      as RealisticSettlementEconomyModel
+                : null;
+
+            var dailyGoldDelta = realEcoModel?.GetTownGoldChange(town) ?? 0;
 
             // 2) Prosperity
             int prosperity = (int)town.Prosperity;

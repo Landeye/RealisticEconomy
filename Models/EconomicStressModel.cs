@@ -1,10 +1,13 @@
 ﻿using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;  // for Settlement
+using TaleWorlds.CampaignSystem.Settlements;  // for Town
 using RealisticEconomy.Behaviors;             // for ResourceBehavior
 
 namespace RealisticEconomy.Models
 {
+    /// <summary>
+    /// Sums normalized daily shortages across all towns of a faction.
+    /// </summary>
     public static class EconomicStressModel
     {
         private const float IdealGoldPerDay = 1000f;
@@ -12,25 +15,35 @@ namespace RealisticEconomy.Models
 
         public static float CalculateESI(IFaction faction)
         {
-            var beh = Campaign.Current.GetCampaignBehavior<ResourceBehavior>();
+            var behavior = Campaign.Current
+                                   .GetCampaignBehavior<ResourceBehavior>();
 
-            // Loop through each town settlement
-            var towns = Settlement.All
-                        .Where(s => s.MapFaction == faction && s.IsTown);
+            // 1) Get all TOWNS owned by this faction
+            var myTowns = Settlement.All
+                          .OfType<Town>()
+                          .Where(t => t.MapFaction == faction);
 
             float stress = 0f;
-            foreach (var settlement in towns)
+
+            // 2) For each town, grab its ledger and compute shortages
+            foreach (var town in myTowns)
             {
-                var ledger = beh.GetLedger(settlement);
+                var ledger = behavior.GetLedger(town);
                 if (ledger == null) continue;
 
-                // Gold stress
-                if (ledger.GoldChange < IdealGoldPerDay)
-                    stress += (IdealGoldPerDay - ledger.GoldChange) / IdealGoldPerDay;
+                // Normalize deltas against ideals
+                float goldShortage = (IdealGoldPerDay - ledger.GoldChange) / IdealGoldPerDay;
+                float foodShortage = (IdealFoodPerDay - ledger.FoodChange) / IdealFoodPerDay;
+                // (if IdealFoodPerDay == 0, treat any negative or positive accordingly)
+                if (IdealFoodPerDay == 0f)
+                {
+                    // Any negative foodΔ counts as full stress; positive is zero stress
+                    foodShortage = ledger.FoodChange < 0f
+                                   ? -ledger.FoodChange / 1000f
+                                   : 0f;
+                }
 
-                // Food stress
-                if (ledger.FoodChange < IdealFoodPerDay)
-                    stress += (IdealFoodPerDay - ledger.FoodChange) / 10f;
+                stress += goldShortage + foodShortage;
             }
 
             return stress;

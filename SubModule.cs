@@ -1,58 +1,38 @@
 ﻿using HarmonyLib;
-using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.Core;
 using TaleWorlds.CampaignSystem;
-using RealisticEconomyMod.Behaviors;      // for ResourceBehavior
-using RealisticEconomyMod;                // for EconomyManager
+using RealisticEconomy.Behaviors;   // behaviours
+using RealisticEconomy;             // EconomyManager
 using TaleWorlds.Library;
+using RealisticEconomy.Models;
 
-namespace RealisticEconomyMod
+namespace RealisticEconomy
 {
     public class SubModule : MBSubModuleBase
     {
-        // Harmony ID can be anything unique
-        private const string HarmonyId = "com.landeye.realisticeconomy";
-
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
 
-            // Apply all [HarmonyPatch] classes in this assembly
-            var harmony = new Harmony(HarmonyId);
+            // 1) Apply Harmony patches
+            var harmony = new Harmony("com.realeconomy.patch");
             harmony.PatchAll();
-
-            // Debug-print so you know patching happened
             InformationManager.DisplayMessage(
-                new InformationMessage("[RealEco] Harmony patches applied")
-            );
+                new InformationMessage("[RealEco] Harmony patched"));
         }
 
-        protected override void OnGameStart(Game game, IGameStarter starter)
+        protected override void OnGameStart(Game game, IGameStarter gsObj)
         {
-            base.OnGameStart(game, starter);
+            base.OnGameStart(game, gsObj);
 
-            if (starter is CampaignGameStarter campaignStarter)
+            if (game.GameType is Campaign && gsObj is CampaignGameStarter starter)
             {
-                // Initialize our global gold pool before any behaviors run
+                starter.AddModel(new RealisticSettlementEconomyModel());   // ✅ ← add it once
+                starter.AddBehavior(new RealisticEconomyBehavior());       //  no AddModel inside
+                starter.AddBehavior(new ResourceBehavior());
+                starter.AddBehavior(new CaravanTradeBehavior());
                 EconomyManager.Initialize();
-
-                InformationManager.DisplayMessage(
-                    new InformationMessage("[RealEco] EconomyManager initialized")
-                );
-
-                // Register your new daily resource snapshot behavior
-                campaignStarter.AddBehavior(new ResourceBehavior());
-
-                InformationManager.DisplayMessage(
-                    new InformationMessage("[RealEco] ResourceBehavior added")
-                );
-
-                // If you have other economy-only behaviors, add them here:
-                // campaignStarter.AddBehavior(new AnotherEconomyBehavior());
-
-                InformationManager.DisplayMessage(
-                    new InformationMessage("[RealEco] SubModule fully initialized")
-                );
             }
         }
     }

@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Module>
-	<Id value="RealisticEconomy" />
-	<Version value="v1.0.0" />
-	<SingleplayerModule value="true" />
-	<Dependencies>
-		<Dependency Id="Native" />
-		<Dependency Id="SandBoxCore" />
-		<Dependency Id="SandBox" />
-		<Dependency Id="StoryMode" />
-		<Dependency Id="Bannerlord.Harmony" />
-	</Dependencies>
+	<Name  value="Realistic Economy Mod"/>
+	<Id    value="RealisticEconomy"/>
+	<Version value="v1.0.0"/>
+	<SingleplayerModule value="true"/>
+
+	<DependedModules>
+		<DependedModule Id="Native"/>
+		<DependedModule Id="SandBoxCore"/>
+		<DependedModule Id="Sandbox"/>
+		<DependedModule Id="StoryMode"/>
+		<DependedModule Id="Bannerlord.Harmony"/>
+	</DependedModules>
+
 	<SubModules>
 		<SubModule>
-			<Name value="Realistic Economy Simulation" />
-			<DLLName value="RealisticEconomy.dll" />
-			<SubModuleClassType value="RealisticEconomy.SubModule" />
-			<Tags>
-				<Tag key="EnableDevConsole" value="true" />
-			</Tags>
+			<Name value="Realistic Economy Simulation"/>
+			<DLLName value="RealisticEconomy.dll"/>
+			<SubModuleClassType value="RealisticEconomy.SubModule"/>
+			<!--  No <Assemblies> block needed: the depended modules provide Harmony & Newtonsoft -->
 		</SubModule>
 	</SubModules>
 </Module>
+
+
+

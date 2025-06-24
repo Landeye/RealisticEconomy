@@ -4,10 +4,9 @@
 		<PlatformTarget>x64</PlatformTarget>
 		<AssemblyName>RealisticEconomy</AssemblyName>
 		<RootNamespace>RealisticEconomy</RootNamespace>
-		<!-- Turn off the SDK’s default “include all .cs” behavior -->
-		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<EnableDefaultItems>true</EnableDefaultItems>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<!-- Ensure SteamLibrary is defined in Directory.Build.props or here -->
+		<!-- Ensure SteamLibrary is defined in Directory.Build.props or override here -->
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -17,10 +16,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- Bannerlord & Harmony references -->
+		<!-- Harmony patching support -->
 		<Reference Include="0Harmony">
 			<HintPath>$(BannerlordPath)\Modules\Bannerlord.Harmony\bin\Win64_Shipping_Client\0Harmony.dll</HintPath>
 		</Reference>
+
+		<!-- Core TaleWorlds assemblies -->
 		<Reference Include="TaleWorlds.Core">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.Core.dll</HintPath>
 		</Reference>
@@ -30,40 +31,43 @@
 		<Reference Include="TaleWorlds.ObjectSystem">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.ObjectSystem.dll</HintPath>
 		</Reference>
+		<Reference Include="TaleWorlds.ModuleManager">
+			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.ModuleManager.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Engine">
+			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.Engine.dll</HintPath>
+		</Reference>
+
+		<!-- Campaign and game logic -->
 		<Reference Include="TaleWorlds.CampaignSystem">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
 		</Reference>
 		<Reference Include="TaleWorlds.MountAndBlade">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.dll</HintPath>
 		</Reference>
+
+		<!-- UI (Gauntlet) if needed -->
 		<Reference Include="TaleWorlds.GauntletUI">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.GauntletUI.dll</HintPath>
 		</Reference>
 		<Reference Include="TaleWorlds.GauntletUI.Data">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.GauntletUI.Data.dll</HintPath>
 		</Reference>
-		<Reference Include="TaleWorlds.Engine">
-			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.Engine.dll</HintPath>
-		</Reference>
-		<Reference Include="TaleWorlds.Localization">
-			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.Localization.dll</HintPath>
-		</Reference>
 		<Reference Include="TaleWorlds.ScreenSystem">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.ScreenSystem.dll</HintPath>
+		</Reference>
+
+		<!-- Localization and save support -->
+		<Reference Include="TaleWorlds.Localization">
+			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.Localization.dll</HintPath>
 		</Reference>
 		<Reference Include="TaleWorlds.SaveSystem">
 			<HintPath>$(BannerlordPath)\bin\Win64_Shipping_Client\TaleWorlds.SaveSystem.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
-	<!-- Now explicitly include your economy code -->
 	<ItemGroup>
-		<Compile Include="Behaviors\**\*.cs" />
-		<Compile Include="Models\**\*.cs" />
-		<Compile Include="Patches\**\*.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<Folder Include="Patches\" />
 		<Folder Include="UI\" />
 	</ItemGroup>
 
@@ -71,8 +75,6 @@
 		<ItemGroup>
 			<_OutputFiles Include="$(OutputPath)**\RealisticEconomy.dll" />
 		</ItemGroup>
-		<Copy SourceFiles="@(_OutputFiles)"
-			  DestinationFolder="$(BannerlordPath)\Modules\RealisticEconomy\bin\Win64_Shipping_Client\"
-			  SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(_OutputFiles)" DestinationFolder="$(BannerlordPath)\Modules\RealisticEconomy\bin\Win64_Shipping_Client\" SkipUnchangedFiles="true" />
 	</Target>
 </Project>
