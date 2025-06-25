@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PartyTemplates>
+	<!-- 1 guard + 4 pack animals -->
+	<PartyTemplate id="re_supply_template" is_mobile="true">
+		<stacks>
+			<!-- human guard -->
+			<stack type="Troops" id="caravan_guard" min="2" max="4"/>
+		</stacks>
+		<items>
+			<!-- 4 sumpter horses for cargo capacity -->
+			<item id="sumpter_horse" number="4"/>
+		</items>
+	</PartyTemplate>
+</PartyTemplates>

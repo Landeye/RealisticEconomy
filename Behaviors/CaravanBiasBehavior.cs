@@ -9,34 +9,21 @@ namespace RealisticEconomy.Behaviors
     {
         public override void RegisterEvents() =>
             CampaignEvents.DailyTickSettlementEvent
-                          .AddNonSerializedListener(this, OnDailyTickSettlement);
+                .AddNonSerializedListener(this, OnDailyTickSettlement);
 
         private void OnDailyTickSettlement(Settlement settlement)
         {
-            var kingdom = settlement?.OwnerClan?.Kingdom;
-            if (kingdom == null) return;
-
-            var tradeDir = Campaign.Current
-                                   .GetCampaignBehavior<TradeDirectiveBehavior>();
+            var tradeDir = Campaign.Current.GetCampaignBehavior<TradeDirectiveBehavior>();
             if (tradeDir == null) return;
 
-            // ‼ TWO out-params, not one
-            Settlement importSettlement;
-            Settlement exportSettlement;
-
-            if (!tradeDir.TryGetOrder(kingdom,
-                                      out importSettlement,
-                                      out exportSettlement))
-                return;                        // no directive this week
+            // Do we have an export partner for THIS settlement?
+            if (!tradeDir.TryGetOrder(settlement, out Settlement exportSettlement))
+                return;
 
             foreach (var caravan in settlement.Parties.Where(p => p.IsCaravan))
             {
-                float bias =
-                    settlement == importSettlement ? 3f :
-                    settlement == exportSettlement ? 0.7f : 1f;
-
-                // TODO: choose an actual AI-tuning call here.
-                // Example placeholder: adjust initiative weights
+                // Higher bias when parked in exporter, lower in importer
+                float bias = settlement == exportSettlement ? 3f : 0.7f;
                 caravan.Ai.SetInitiative(bias, 1f, 6f);
             }
         }
