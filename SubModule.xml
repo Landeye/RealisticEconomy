@@ -13,12 +13,16 @@
 		<DependedModule Id="Bannerlord.Harmony"/>
 	</DependedModules>
 
+	<!-- custom XML data files -->
+	<Xmls>
+		<XmlNode path="ModuleData/party_templates.xml"/>
+	</Xmls>
+
 	<SubModules>
 		<SubModule>
 			<Name value="Realistic Economy Simulation"/>
 			<DLLName value="RealisticEconomy.dll"/>
 			<SubModuleClassType value="RealisticEconomy.SubModule"/>
-			<!--  No <Assemblies> block needed: the depended modules provide Harmony & Newtonsoft -->
 		</SubModule>
 	</SubModules>
 </Module>

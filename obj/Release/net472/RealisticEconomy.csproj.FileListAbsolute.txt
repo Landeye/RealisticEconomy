@@ -42,6 +42,7 @@ C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\MonoMod.Iced.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\TaleWorlds.Diamond.AccessProvider.Test.dll
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\bin\Release\net472\net472\TaleWorlds.ServiceDiscovery.Client.dll
+C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.csprojAssemblyReference.cache
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.csproj.CoreCompileInputs.cache
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.csproj.CopyComplete
 C:\Users\Landis\Desktop\BannerlordModBackup\RealisticEconomy\obj\Release\net472\RealisticEconomy.dll
